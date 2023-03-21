@@ -79,10 +79,12 @@ class crossword():
         print("START ADD ACROSS")
         pos = len(self.across)
         inter = []
+        #basically check what word can fit into next across
         for i, word in enumerate(self.down):
             inter.append(self.get_list(word[pos], i))
         fit_words = list(self.intersection(inter))
         print("length", len(fit_words))
+        #if no words fit then you want to backtrack
         if not fit_words:
             print("no fit words across")
             self.backtrack_across()
@@ -112,6 +114,7 @@ class crossword():
             #all scores = 0 means no words fit
             if not any(scores):
                 self.backtrack_across()
+            #if there's at least one word that fits just add word and continue
             else:
                 top_word = words[scores.index(max(scores))]
                 self.across.append(top_word)
