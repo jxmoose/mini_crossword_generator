@@ -59,11 +59,10 @@ class crossword():
         else:
             scores = []
             words = []
-            for i in range(min(len(fit_words), self.word_tries)):
+            while i < len(fit_words) and i < self.word_tries:
                 score = 1
-                word = fit_words[i]
+                word = fit_words.pop()
                 if word in banned:
-                    print("across ban")
                     continue
                 self.across.append(word)
                 for j in range(len(self.down), 4):
@@ -74,13 +73,14 @@ class crossword():
                 scores.append(score)
                 words.append(word)
                 self.across.remove(word)
+                i += 1
             print("SCORES:")
             print(scores)
             print(words)
-            top_word = words[scores.index(max(scores))]
             if not any(scores):
                 self.backtrack_across(banned)
             else:
+                top_word = words[scores.index(max(scores))]
                 self.across.append(top_word)
             #    if (len(self.across) != 5):
             #        self.add_down([])
@@ -91,8 +91,6 @@ class crossword():
         ban_word = self.across.pop()
         self.add_across(banned + [ban_word])
         print("DONE BACKTRACKING")
-        self.add_down([])
-        self.add_across([])
 
     def backtrack_down(self, banned):
         print("backtrack_down")
@@ -114,9 +112,9 @@ class crossword():
         else:
             scores = []
             words = []
-            for i in range(min(self.word_tries, len(fit_words))):
+            while i < len(fit_words) and i < self.word_tries:
                 score = 1
-                word = fit_words[i]
+                word = fit_words.pop()
                 if word in banned:
                     continue
                 self.down.append(word)
@@ -128,10 +126,11 @@ class crossword():
                 scores.append(score)
                 words.append(word)
                 self.down.remove(word)
-            top_word = words[scores.index(max(scores))]
+                i += 1
             if not any(scores):
                 self.backtrack_down(banned)
-            else: 
+            else:
+                top_word = words[scores.index(max(scores))]
                 self.down.append(top_word)
             #    if (len(self.down) != 5):
             #        self.add_across([])
@@ -158,7 +157,7 @@ c.add_across([])
 c.add_down([])
 c.add_across([])
 c.add_down([])
-c.add_across(["ALKFJDLSKJFLSDKFJLSDKFJLSDKFJSDLFKJSDLFKSDJFLKSDJFLKDSJFKLSDFJ"])
+#c.add_across(["BANNED_WORD_TEST"])
 print("DONE")
 print("ACROSS", c.across)
 print("DOWN", c.down)
