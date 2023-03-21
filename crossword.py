@@ -5,6 +5,7 @@ class crossword():
     word_lists = [[] for i in range(130)]
     scores = {}
     word_tries = 10
+    banned = set()
 
     def parse_data(self, file):
         filepath = Path(__file__).parent / file
@@ -46,23 +47,24 @@ class crossword():
                     self.get_list(word[i], i).append(word)
         self.add_down([])
 
-    def add_across(self, banned):
+    def add_across(self, banned = []):
         print("START ADD ACROSS")
         pos = len(self.across)
         inter = []
         for i, word in enumerate(self.down):
             inter.append(self.get_list(word[pos], i))
         fit_words = list(self.intersection(inter))
+        print("length", len(fit_words))
         if not fit_words:
             print("no fit words across")
-            self.backtrack_across(banned)
+            self.backtrack_across()
         else:
             scores = []
             words = []
             while i < len(fit_words) and i < self.word_tries:
                 score = 1
                 word = fit_words.pop()
-                if word in banned:
+                if word in self.banned:
                     continue
                 self.across.append(word)
                 for j in range(len(self.down), 4):
@@ -78,34 +80,44 @@ class crossword():
             print(scores)
             print(words)
             if not any(scores):
-                self.backtrack_across(banned)
+                self.backtrack_across()
             else:
                 top_word = words[scores.index(max(scores))]
                 self.across.append(top_word)
             #    if (len(self.across) != 5):
             #        self.add_down([])
 
-    def backtrack_across(self, banned):
+    def backtrack_across(self):
         print("backtrack_across")
         del self.down[-1]
         ban_word = self.across.pop()
-        self.add_across(banned + [ban_word])
+        self.banned.add(ban_word)
+        print("ACROSS", self.across)
+        print("DOWN", self.down)
+        print(self.banned)
+        self.add_across([ban_word])
+        self.add_down()
+        self.add_across()
         print("DONE BACKTRACKING")
 
-    def backtrack_down(self, banned):
+    def backtrack_down(self):
         print("backtrack_down")
         del self.across[-1]
         ban_word = self.down.pop()
-        self.add_down(banned + [ban_word])
+        self.banned.add(ban_word)
+        self.add_down([ban_word])
+        self.add_across()
+        self.add_down()
         print("DONE BACKTRACKING")
 
-    def add_down(self, banned):
+    def add_down(self, banned = []):
         print("START ADD DOWN")
         pos = len(self.down)
         inter = []
         for i, word in enumerate(self.across):
             inter.append(self.get_list(word[pos], i))
         fit_words = list(self.intersection(inter))
+        print("length", len(fit_words))
         if not fit_words:
             print("no fit words down")
             self.backtrack_down()
@@ -115,7 +127,7 @@ class crossword():
             while i < len(fit_words) and i < self.word_tries:
                 score = 1
                 word = fit_words.pop()
-                if word in banned:
+                if word in self.banned:
                     continue
                 self.down.append(word)
                 for j in range(len(self.across), 4):
@@ -128,7 +140,7 @@ class crossword():
                 self.down.remove(word)
                 i += 1
             if not any(scores):
-                self.backtrack_down(banned)
+                self.backtrack_down()
             else:
                 top_word = words[scores.index(max(scores))]
                 self.down.append(top_word)
@@ -151,13 +163,14 @@ class crossword():
         return set.intersection(*map(set, inputs))
 
 c = crossword('hello')
-c.add_across([])
-c.add_down([])
-c.add_across([])
-c.add_down([])
-c.add_across([])
-c.add_down([])
-#c.add_across(["BANNED_WORD_TEST"])
+c.add_across()
+c.add_down()
+c.add_across()
+c.add_down()
+c.add_across()
+c.add_down()
+c.add_across()
+# c.add_down()
 print("DONE")
 print("ACROSS", c.across)
 print("DOWN", c.down)
