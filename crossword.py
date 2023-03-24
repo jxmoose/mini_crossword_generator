@@ -5,7 +5,8 @@ class crossword():
     word_lists = [[] for i in range(130)]
     scores = {}
     word_tries = 10
-    banned = set()
+    banned_across = set()
+    banned_down = set()
 
     #just reads data and puts it in .txt file
     def parse_data(self, file):
@@ -53,23 +54,20 @@ class crossword():
     #i added a instance variable "banned" rather than putting it as inputs into add_across/down and it seems to work better. haven't edited out parameter banned yet but nothing should be using it
     def backtrack_across(self):
         print("backtrack_across")
-        del self.down[-1]
-        ban_word = self.across.pop()
-        self.banned.add(ban_word)
+        ban_word = self.down.pop()
+        self.banned_down.add(ban_word)
         print("ACROSS", self.across)
         print("DOWN", self.down)
-        print(self.banned)
-        self.add_across([ban_word])
         self.add_down()
         self.add_across()
         print("DONE BACKTRACKING")
 
     def backtrack_down(self):
         print("backtrack_down")
-        del self.across[-1]
-        ban_word = self.down.pop()
-        self.banned.add(ban_word)
-        self.add_down([ban_word])
+        ban_word = self.across.pop()
+        self.banned_across.add(ban_word)
+        print("ACROSS", self.across)
+        print("DOWN", self.down)
         self.add_across()
         self.add_down()
         print("DONE BACKTRACKING")
@@ -95,11 +93,11 @@ class crossword():
             while i < len(fit_words) and i < self.word_tries:
                 score = 1
                 word = fit_words.pop()
-                if word in self.banned:
+                if word in self.banned_across:
                     continue
                 self.across.append(word)
                 #basically checking for all the intersections and multiplying a score
-                for j in range(len(self.down), 4):
+                for j in range(len(self.down), 5):
                     inter = []
                     for k in range(len(self.across)):
                         inter.append(self.get_list(self.across[k][j], k))
@@ -136,10 +134,10 @@ class crossword():
             while i < len(fit_words) and i < self.word_tries:
                 score = 1
                 word = fit_words.pop()
-                if word in self.banned:
+                if word in self.banned_down:
                     continue
                 self.down.append(word)
-                for j in range(len(self.across), 4):
+                for j in range(len(self.across), 5):
                     inter = []
                     for k in range(len(self.down)):
                         inter.append(self.get_list(self.down[k][j], k))
@@ -181,7 +179,6 @@ c.add_across()
 c.add_down()
 c.add_across()
 c.add_down()
-c.add_across()
 print("DONE")
 print("ACROSS", c.across)
 print("DOWN", c.down)
