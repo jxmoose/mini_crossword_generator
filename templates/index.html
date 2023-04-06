@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Layout</title>
+    <style> 
+        #grid {
+            display: flex;
+            flex-wrap: wrap;
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            width: 50px;
+            height: 50px;  
+            overflow: hidden;
+        }
+
+        * {
+        font-family: "Comic Sans MS", "Comic Sans", cursive;
+        text-align: center;
+        }
+
+        .t {
+            font-weight: bold;
+        }
+    </style>
+</head>
+ 
+<body>
+    <h1> Mini Crossword Generator </h1>
+    <h3> Put in any 5 letter word and it will generate a mini 5x5 mini crossword with it! </h3>
+
+    <h1> {{ message }} </h1>
+    <form action="{{ url_for('crossword') }}" method="post">
+        <input type="text" name="word" placeholder="Any 5 Letter Word!">
+        <input type="submit">
+    </form>
+
+    <br>
+    <br>
+
+    <div id="grid">
+        <div class="grid-item"></div>
+        <div class="grid-item t" > {{n1}}</div>
+        <div class="grid-item t"> {{n2}}</div>
+        <div class="grid-item t"> {{n3}}</div>
+        <div class="grid-item t"> {{n4}}</div>
+        <div class="grid-item t"> {{n5}}</div>
+        <div class="grid-item t"> {{n1}}</div>
+        <div class="grid-item"> {{ l1 }} </div>
+        <div class="grid-item"> {{ l2 }} </div>
+        <div class="grid-item"> {{ l3 }} </div>
+        <div class="grid-item"> {{ l4 }} </div>
+        <div class="grid-item"> {{ l5 }} </div>
+        <div class="grid-item t"> {{n6}}</div>
+        <div class="grid-item"> {{ l6 }} </div>
+        <div class="grid-item"> {{ l7 }} </div>
+        <div class="grid-item"> {{ l8 }} </div>
+        <div class="grid-item"> {{ l9 }} </div>
+        <div class="grid-item"> {{ l10 }} </div>
+        <div class="grid-item t"> {{n7}}</div>
+        <div class="grid-item"> {{ l11 }} </div>
+        <div class="grid-item"> {{ l12 }} </div>
+        <div class="grid-item"> {{ l13 }} </div>
+        <div class="grid-item"> {{ l14 }} </div>
+        <div class="grid-item"> {{ l15 }} </div>
+        <div class="grid-item t"> {{n8}}</div>
+        <div class="grid-item"> {{ l16 }} </div>
+        <div class="grid-item"> {{ l17 }} </div>
+        <div class="grid-item"> {{ l18 }} </div>
+        <div class="grid-item"> {{ l19 }} </div>
+        <div class="grid-item"> {{ l20 }} </div>
+        <div class="grid-item t"> {{n9}}</div>
+        <div class="grid-item"> {{ l21 }} </div>
+        <div class="grid-item"> {{ l22 }} </div>
+        <div class="grid-item"> {{ l23 }} </div>
+        <div class="grid-item"> {{ l24 }} </div>
+        <div class="grid-item"> {{ l25 }} </div>
+    </div>
+    <div style="width: 100%; display: table;">
+        <div style="display: table-row">
+            <div style="display: table-cell; width:50%;"> 
+                <h3> {{word1}} </h3>
+                    <p> {{a0}} </p>
+                    <p> {{a1}} </p>
+                    <p> {{a2}} </p>
+                    <p> {{a3}} </p>
+                    <p> {{a4}} </p>
+            </div>
+            <div style="display: table-cell;">
+                <h3> {{word2}} </h3>
+                    <p> {{d0}} </p>
+                    <p> {{d1}} </p>
+                    <p> {{d2}} </p>
+                    <p> {{d3}} </p>
+                    <p> {{d4}} </p>
+                {{ down_clues }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
